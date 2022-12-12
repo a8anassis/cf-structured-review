@@ -1,5 +1,15 @@
 package testbed.review;
 
+/**
+ * Assume a sorted array with repeated elements.
+ * We will develop a method int[] getLowAndHighIndexOf(int[]
+ * arr, int key) that returns the low and high index of an array,
+ * for an integer key that gets as parameter.
+ * We will also author a main() that finds low and high for the
+ * array: {0, 1, 4, 4, 4, 6, 7, 8, 8, 8, 8, 8}. For instance, if
+ * we insert 8 as key, the algorithm should return {7, 11} or {8, 12}
+ * if we make a tiny user-friendly optimization.
+ */
 public class LowAndHighIndexApp {
 
     public static void main(String[] args) {

@@ -2,12 +2,12 @@ package testbed.review;
 
 /**
  * Μετατρέπει σε κεφαλαία-πεζά εναλλάξ με το 1ο κεφαλαίο.
- * "Thanassis" -> "ThAnAsSiS"
+ * Παράδειγμα: "athanassios" -> "AtHaNaSsIoS"
  */
 public class UpperLowerCaseApp {
 
     public static void main(String[] args) {
-        String sentence = "thanassis";
+        String sentence = "Athanassios";
         StringBuilder sb = new StringBuilder();
         String s;
         String subString;

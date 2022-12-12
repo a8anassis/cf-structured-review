@@ -8,8 +8,18 @@ import java.util.Arrays;
 import java.util.Comparator;
 import java.util.Scanner;
 
+/**
+ * Αναπτύξτε μία εφαρμογή που διαβάζει έναν-έναν τους χαρακτήρες ενός αρχείου
+ * και τους εισάγει σε ένα πίνακα 256x2. Κάθε θέση του πίνακα είναι επομένως
+ * ένας πίνακας δύο θέσεων, όπου στη 1η θέση αποθηκεύεται ο χαρακτήρας που έχει
+ * διαβαστεί (αν δεν υπάρχει ήδη στον πίνακα) και στη 2η θέση αποθηκεύεται το πλήθος
+ * των φορών που έχει διαβαστεί (βρεθεί) κάθε χαρακτήρας. Χαρακτήρες θεωρούνται και τα
+ * κενά και οι αλλαγές γραμμής και γενικά οποιοσδήποτε UTF-8 χαρακτήρας.
+ * Στο τέλος η main() παρουσιάζει στατιστικά στοιχεία για κάθε χαρακτήρα όπως η συχνότητα
+ * εμφάνισής του στο κείμενο ταξινομημένα ανά χαρακτήρα και ανά συχνότητα εμφάνισης.
+ */
 public class CharReadAndStatisticsApp {
-    final static Path path = Paths.get("C:/tmp/logCharStatistics.txt");
+    final static Path path = Paths.get("C:/tmp/logTextStatistics.txt");
     final static int[][] text = new int[256][2];
     static int pivot = -1;
     static int count = 0;
@@ -17,14 +27,23 @@ public class CharReadAndStatisticsApp {
 
     public static void main(String[] args)  {
         try {
-            getCharAndSaveService();
-            printStatistics();
+            readTextAndSaveService();
+            printStatisticsService();
         } catch (IOException e) {
             System.out.println("Error in I/O");
         }
     }
 
-    public static void getCharAndSaveService() throws IOException, IllegalArgumentException {
+    /**
+     * Reads text from a file using a FileInputStream with 4096 bytes buffering.
+     * Then, each char is saved in the 2D array.
+     *
+     * @throws IOException
+     *          if file name is invalid.
+     * @throws IllegalArgumentException
+     *          if 2D array is full or any storage error.
+     */
+    public static void readTextAndSaveService() throws IOException, IllegalArgumentException {
         int ch;
         byte[] buf = new byte[4096];
         int n = 0;
@@ -44,16 +63,34 @@ public class CharReadAndStatisticsApp {
         }
     }
 
-    public static void printStatistics() {
+    /**
+     * For each char in the input text, ot prints the count and
+     * the percentage, sorted by char asc and percentage asc.
+     */
+    public static void printStatisticsService() {
         int[][] copiedText = Arrays.copyOfRange(text, 0, pivot + 1);
 
         Arrays.sort(copiedText, Comparator.comparing(a -> a[0]));
         System.out.println("Statistics (Char Ascending)");
         for (int[] ints : copiedText) {
-            System.out.printf("%c\t%d\t%.2f%%\n", ints[0], ints[1], ints[1] / (double) count);
+            System.out.printf("%c\t%d\t%.4f%%\n", ints[0], ints[1], ints[1] / (double) count);
+        }
+
+        Arrays.sort(copiedText, Comparator.comparing(a -> a[1]));
+        System.out.println("Statistics (Percentage Ascending)");
+        for (int[] ints : copiedText) {
+            System.out.printf("%c\t%d\t%.4f%%\n", ints[0], ints[1], ints[1] / (double) count);
         }
     }
 
+    /**
+     * Inserts a char in a 2D array together with its
+     * occurrences' count in the text.
+     *
+     * @param ch    the char
+     * @return      true, if the char inserted in 2D array,
+     *              false, otherwise.
+     */
     public static boolean saveChar(int ch) {
         int charPosition = -1;
         boolean inserted = false;

@@ -5,35 +5,37 @@ import java.util.List;
 import java.util.Scanner;
 
 /**
- * Βρίσκει αν το άθροισμα των δυνάμεων
- * κάθε ψηφίου εις τη (πλήθος ψηφίων)
- * είναι ίσο με τον ίδιο τον αριθμό.
+ * Βρίσκει αν το άθροισμα των δυνάμεων κάθε ψηφίου εις τη (πλήθος ψηφίων)
+ * είναι ίσο με τον ίδιο τον αριθμό. Π.χ. το 153 = 1^3 + 5^3 + 3^3. Επομένως
+ * το 153 είναι Armstrong number. Επίσης, τα 370, 371, 407.
  */
 public class ArmstrongApp {
 
     public static void main(String[] args) {
-        Scanner in = new Scanner(System.in);
+        final Scanner in = new Scanner(System.in);
+        final List<Integer> digits = new ArrayList<>();
         int inputNumber = 0;
         int digitsCount = 0;
         int num = 0;
         int sum = 0;
         int digit = 0;
         boolean isArmstrong = false;
-        List<Integer> digits = new ArrayList<>();
+
 
         System.out.println("Please insert a number (int)");
         inputNumber = in.nextInt();
 
         num = inputNumber;
-        // Digits count
+
+        // Find digits count
         do {
             digitsCount++;
-            if (digitsCount > 5) break;
             digit = num % 10;
             digits.add(digit);
             num = num / 10;
         } while (num != 0);
 
+        // Find the sum
         for (int item : digits) {
             sum += Math.pow(item, digitsCount);
         }

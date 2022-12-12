@@ -2,6 +2,10 @@ package testbed.review;
 
 import java.util.Scanner;
 
+/**
+ * Prints stars in several patterns (horizontally,
+ * vertically, nxn, nXn ascending, nXn descending).
+ */
 public class ProjectCh5 {
 
     static Scanner in = new Scanner(System.in);
@@ -21,7 +25,7 @@ public class ProjectCh5 {
         } while (!quit);
     }
 
-    public static void printOnChoice(String s) throws IllegalArgumentException {
+    public static void printOnChoice(String s) {
         int choice = -1;
         int n = 0;
 

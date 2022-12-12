@@ -1,5 +1,9 @@
 package testbed.review;
 
+/**
+ * Finds the position in an array of the
+ * max element of the array.
+ */
 public class MaxPositionApp {
 
     public static void main(String[] args) {
@@ -9,9 +13,16 @@ public class MaxPositionApp {
         maxPos = getMaxPosition(arr, 0, arr.length-1);
         if (maxPos == -1) System.exit(1);
         System.out.println(arr[maxPos]);
-
     }
 
+    /**
+     * Returns the position of the max element.
+     *
+     * @param arr       the source array
+     * @param low       the low index (lowest is 0)
+     * @param high      the high index (highest is length - 1)
+     * @return          the position of the max element
+     */
     public static int getMaxPosition(int[] arr, int low, int high) {
         int maxPosition = 0;
         int maxValue = 0;

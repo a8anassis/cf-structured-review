@@ -6,17 +6,22 @@ import java.io.PrintStream;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.time.LocalDateTime;
+import java.util.Arrays;
 import java.util.Scanner;
 
+/**
+ * Mobile Contacts Management System.
+ * @author a8ana
+ */
 public class MobileApp2 {
-    static Scanner in = new Scanner(System.in);
-    static Path path = Paths.get("C:/tmp/logMobile.txt");
-    static String[][] contacts = new String[100][3];
+    final static Scanner in = new Scanner(System.in);
+    final static Path path = Paths.get("C:/tmp/logMobile.txt");
+    final static String[][] contacts = new String[500][3];
     static int pivot = -1;
 
     public static void main(String[] args) {
         boolean quit = false;
-        String s = "";
+        String s;
 
         do {
             printGenericMenu();
@@ -24,23 +29,23 @@ public class MobileApp2 {
             if (s.matches("[qQ]")) quit = true;
             else {
                 try {
-                    handleChoice(s);
+                    handleChoiceController(s);
                 } catch (IllegalArgumentException e) {
                     System.out.println(e.getMessage());
                 }
             }
         } while (!quit);
 
-        System.out.println("Bios");
+        System.out.println("Thank you for using the Mobile-Contact Management System");
     }
 
-    public static boolean isValid(int choice) {
-        return ((choice >= 1) && (choice <= 5));
-    }
 
-    public static void handleChoice(String s) {
-        int choice = 0;
-        String phoneNumber = "";
+    /*
+     * UI interaction provided by the controller methods
+     */
+    public static void handleChoiceController(String s) {
+        int choice;
+        String phoneNumber;
 
         try {
             choice = Integer.parseInt(s);
@@ -50,42 +55,49 @@ public class MobileApp2 {
 
             switch (choice) {
                 case 1:
-                    printContactMenu();
                     try {
+                        printContactMenu();
                         insertContactService(getFirstname(), getLastname(), getPhoneNumber());
                     } catch (IllegalArgumentException e) {
+                        log(e, "Insert Contact");
                         throw e;
                     }
                     break;
                 case 2:
-                    phoneNumber = getPhoneNumber();
                     try {
+                        phoneNumber = getPhoneNumber();
                         deleteContactService(phoneNumber);
                     } catch (IllegalArgumentException e) {
+                        log(e, "Delete Contact");
                         throw e;
                     }
                     break;
                 case 3:
-                    phoneNumber = getPhoneNumber();
-                    printContactMenu();
                     try {
+                        phoneNumber = getPhoneNumber();
+                        printContactMenu();
                         updateContactService(phoneNumber, getFirstname(), getLastname(), getPhoneNumber());
                     } catch (IllegalArgumentException e) {
+                        log(e, "Update Contact");
                         throw e;
                     }
                     break;
                 case 4:
-                    phoneNumber = getPhoneNumber();
                     try {
-                        getAndPrintContactService(phoneNumber);
+                        phoneNumber = getPhoneNumber();
+                        String[] contact = getContactByPhoneNumberService(phoneNumber);
+                        printContact(contact);
                     } catch (IllegalArgumentException e) {
+                        log(e, "Print Contact");
                         throw e;
                     }
                     break;
                 case 5:
                     try {
-                        printContactsService();
+                        String[][] contacts = getAllContacts();
+                        printContacts(contacts);
                     } catch (IllegalArgumentException e) {
+                        log(e, "Print Contacts");
                         throw e;
                     }
                     break;
@@ -98,13 +110,76 @@ public class MobileApp2 {
         }
     }
 
-    public static void getAndPrintContactService(String phoneNumber) {
+    public static boolean isValid(int choice) {
+        return ((choice >= 1) && (choice <= 5));
+    }
+
+    public static void printContacts(String[][] contacts) {
+        try {
+            if (contacts.length == 0) throw new IllegalArgumentException("List is empty");
+
+            for (String[] contact : contacts) {
+                System.out.printf("%s\t%s\t%s\n", contact[0],contact[1], contact[2]);
+            }
+        } catch (IllegalArgumentException e) {
+            log(e);
+            throw e;
+        }
+    }
+
+    public static void printContact(String[] contact) {
+        for (String item : contact) {
+            System.out.print(item + " ");
+        }
+
+        System.out.println();
+    }
+
+    public static void printGenericMenu() {
+        System.out.println("Επιλέξτε ένα από τα παρακάτω: ");
+        System.out.println("1. Εισαγωγή Επαφής");
+        System.out.println("2. Διαγραφή Επαφής");
+        System.out.println("3. Ενημέρωση Επαφής");
+        System.out.println("4. Αναζήτηση Επαφής");
+        System.out.println("5. Εκτυπώστε τις επαφές");
+        System.out.println("Q. Έξοδος");
+    }
+
+    public static void printContactMenu() {
+        System.out.println("Εισάγετε Όνομα, Επώνυμο και Τηλέφωνο");
+    }
+
+    public static String getChoice() {
+        System.out.println("Εισάγετε επιλογή");
+        return in.nextLine().trim();
+    }
+
+    public static String getFirstname() {
+        System.out.println("Εισάγετε Όνομα");
+        return in.nextLine().trim();
+    }
+
+    public static String getLastname() {
+        System.out.println("Εισάγετε Επώνυμο");
+        return in.nextLine().trim();
+    }
+
+    public static String getPhoneNumber() {
+        System.out.println("Εισάγετε Αριθμό Τηλεφώνου");
+        return in.nextLine().trim();
+    }
+
+
+    /*
+     * Services provided to the client (e.g. main)
+     */
+    public static String[] getContactByPhoneNumberService(String phoneNumber) {
         try {
             String[] contact = getContactByPhoneNumber(phoneNumber);
             if (contact.length == 0) {
                 throw new IllegalArgumentException("Contact not found");
             } else {
-                printContact(contact);
+                return contact;
             }
         } catch (IllegalArgumentException e) {
             log(e);
@@ -151,63 +226,10 @@ public class MobileApp2 {
         }
     }
 
-    public static void printContactsService() {
-        try {
-            if (pivot == -1) throw new IllegalArgumentException("List is empty");
-            for (int i = 0; i <= pivot; i ++) {
-                System.out.printf("%s\t%s\t%s\n", contacts[i][0],contacts[i][1], contacts[i][2]);
-            }
-        } catch (IllegalArgumentException e) {
-            log(e);
-            throw e;
-        }
-    }
 
-    public static void printContact(String[] contact) {
-        for (String item : contact) {
-            System.out.print(item + " ");
-        }
-
-        System.out.println();
-    }
-
-
-    public static void printGenericMenu() {
-        System.out.println("Επιλέξτε ένα από τα παρακάτω: ");
-        System.out.println("1. Εισαγωγή Επαφής");
-        System.out.println("2. Διαγραφή Επαφής");
-        System.out.println("3. Ενημέρωση Επαφής");
-        System.out.println("4. Αναζήτηση Επαφής");
-        System.out.println("5. Εκτυπώστε τις επαφές");
-        System.out.println("Q. Έξοδος");
-    }
-
-    public static void printContactMenu() {
-        System.out.println("Εισάγετε Όνομα, Επώνυμο και Τηλέφωνο");
-    }
-
-    public static String getChoice() {
-        System.out.println("Εισάγετε επιλογή");
-        return in.nextLine().trim();
-    }
-
-    public static String getFirstname() {
-        System.out.println("Εισάγετε Όνομα");
-        return in.nextLine().trim();
-    }
-
-    public static String getLastname() {
-        System.out.println("Εισάγετε Επώνυμο");
-        return in.nextLine().trim();
-    }
-
-    public static String getPhoneNumber() {
-        System.out.println("Εισάγετε Αριθμό Τηλεφώνου");
-        return in.nextLine().trim();
-    }
-
-
-    // CRUD API
+    /*
+     * CRUD Services provided to Service layer
+     */
 
     public static int getContactIndexByPhoneNumber(String phoneNumber) {
         for (int i = 0; i <= pivot; i++) {
@@ -271,9 +293,18 @@ public class MobileApp2 {
         }
     }
 
-    public static void log(Exception e) {
+    public static String[][] getAllContacts() {
+        return Arrays.copyOf(contacts, pivot + 1);
+    }
+
+
+    /*
+     * Logging Services
+     */
+    public static void log(Exception e, String... message) {
         try (PrintStream ps = new PrintStream(new FileOutputStream(path.toFile(), true))) {
             ps.println(LocalDateTime.now() + "\n" + e);
+            ps.printf("%s", message.length == 1 ? message[0] : "");
         } catch (IOException ex) {
             ex.printStackTrace();
         }

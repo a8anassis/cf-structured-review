@@ -2,6 +2,18 @@ package testbed.review;
 
 import java.util.Scanner;
 
+/**
+ * Iteratively shows a multi-choice menu. The users select
+ * a choice and gets feedback, or Q/q and quit.
+ * It handles common exceptions such as NumberFormatException
+ * or IllegalArgumentException that although are runtime exceptions
+ * are recoverable in this case. The menu choices are:
+ * 1. Insert
+ * 2. Update
+ * 3. Delete
+ * 4. Search
+ * Q/q. Quit
+ */
 public class ProjectCh3 {
     static Scanner in = new Scanner(System.in);
 
@@ -24,7 +36,7 @@ public class ProjectCh3 {
         } while (!quit);
     }
 
-    public static void printOnChoice(String s) {
+    public static void printOnChoice(String s)  {
         int choice = -1;
 
         try {

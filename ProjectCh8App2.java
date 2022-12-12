@@ -8,6 +8,12 @@ import java.nio.file.Paths;
 import java.time.LocalDateTime;
 import java.util.Scanner;
 
+/**
+ * Runtime Exceptions handling. Although Runtime
+ * exceptions shouldn't be handled since they are
+ * considered programming errors, there are cases
+ * where that kind of exceptions are recoverable.
+ */
 public class ProjectCh8App2 {
     static Scanner in = new Scanner(System.in);
 
@@ -36,7 +42,7 @@ public class ProjectCh8App2 {
     }
 
     public static String getChoice()  {
-        return in.nextLine();
+        return in.nextLine().trim();
     }
 
     public static void printChoice(String s) throws IllegalArgumentException {

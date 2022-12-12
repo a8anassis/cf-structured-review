@@ -1,5 +1,8 @@
 package testbed.review;
 
+/**
+ * Finds the second min of an array of integers.
+ */
 public class SecondMinApp {
 
     public static void main(String[] args) {
@@ -11,6 +14,16 @@ public class SecondMinApp {
         System.out.println(arr[secMin]);
     }
 
+    /**
+     * Divides the array space into two areas.
+     * The area where both min and second min are
+     * less than both current min and second min
+     * and the area where min is greater than current
+     * min whereas second min is less than second min.
+     *
+     * @param arr       the source array
+     * @return          the position of the second-lowest element
+     */
     public static int getSecondMinPosition(int[] arr) {
         int min = 0;
         int secondMin = 1;

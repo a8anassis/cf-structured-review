@@ -1,3 +1,3 @@
 # October 2022 Coding Factory
 
-Mini=projcts review for Structured Programming. 
+Mini-projects review for Structured Programming. 
