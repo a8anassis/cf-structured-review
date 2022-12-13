@@ -16,8 +16,8 @@ import java.util.ArrayList;
 public class CryptoWithMod {
 
     public static void main(String[] args) {
-        final int KEY = 128;
-        String s = "Apollo 17 was the final mission of NASA's Apollo program.";
+        final int KEY = 800;
+        String s = "Apollo 17 was the final mission of NASA's Apollo program.#";
         String s1 = encrypt(s, KEY).toString();
         System.out.println(s1);
 
@@ -60,13 +60,12 @@ public class CryptoWithMod {
             i++;
         }
 
-        decrypted.add('#');
         return decrypted;
     }
 
     public static int cipher(char ch, int prev, int key) {
         if (prev == -1) return ch;
-        else return ch + prev % key;
+        else return (ch + prev) % key;
     }
 
     public static char decipher(int cipher, int prev, int key) {
@@ -74,12 +73,8 @@ public class CryptoWithMod {
 
         if (prev == -1) return (char) cipher;
         else {
-            de = (cipher - prev + key );
-
-            while (de > key) {
-                de -= key;
-            }
-
+            de = cipher + key - prev;
+            if (de > key) de -= key;
             return (char) de;
         }
     }

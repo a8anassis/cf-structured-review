@@ -31,7 +31,8 @@ public class MaxCarsApp {
             System.out.println(row[1]);
         }
 
-        System.out.println("max: " + getMaxOnes(transformed));
+        //System.out.println("max: " + getMaxOnes(transformed));
+        System.out.println("Max Concurrent Cars: " + getMaxConcurrentCars(transformed));
     }
 
     /**
@@ -92,5 +93,27 @@ public class MaxCarsApp {
         }
 
         return maxTimes;
+    }
+
+    /**
+     * Returns the number of cars that are parked
+     * during the same time interval.
+     *
+     * @param arr   the source array with arrivals and departures
+     * @return      the concurrently parked cars
+     */
+    public static int getMaxConcurrentCars(int[][] arr) {
+        int count = 0;
+        int maxCount = 0;
+
+        for (int[] ints : arr) {
+            if (ints[1] == 1){
+                count++;
+                if (count > maxCount) maxCount = count;
+            }
+            else count--;
+        }
+
+        return maxCount;
     }
 }
