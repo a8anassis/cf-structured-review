@@ -6,13 +6,13 @@ import java.io.PrintStream;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.time.LocalDateTime;
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Scanner;
 
 /**
  * Mobile Contacts Management System.
  * @author a8ana
+ * @version 1.0
  */
 public class MobileApp2 {
     final static Scanner in = new Scanner(System.in);
