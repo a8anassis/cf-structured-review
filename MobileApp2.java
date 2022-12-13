@@ -6,6 +6,7 @@ import java.io.PrintStream;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Scanner;
 
@@ -38,7 +39,6 @@ public class MobileApp2 {
 
         System.out.println("Thank you for using the Mobile-Contact Management System");
     }
-
 
     /*
      * UI interaction provided by the controller methods
@@ -94,7 +94,7 @@ public class MobileApp2 {
                     break;
                 case 5:
                     try {
-                        String[][] contacts = getAllContacts();
+                        String[][] contacts = getAllContactsService();
                         printContacts(contacts);
                     } catch (IllegalArgumentException e) {
                         log(e, "Print Contacts");
@@ -115,15 +115,8 @@ public class MobileApp2 {
     }
 
     public static void printContacts(String[][] contacts) {
-        try {
-            if (contacts.length == 0) throw new IllegalArgumentException("List is empty");
-
-            for (String[] contact : contacts) {
-                System.out.printf("%s\t%s\t%s\n", contact[0],contact[1], contact[2]);
-            }
-        } catch (IllegalArgumentException e) {
-            log(e);
-            throw e;
+        for (String[] contact :contacts) {
+            System.out.printf("%s\t%s\t%s\n", contact[0],contact[1], contact[2]);
         }
     }
 
@@ -187,6 +180,18 @@ public class MobileApp2 {
         }
     }
 
+    public static String[][] getAllContactsService() {
+        String[][] contacts = getAllContacts();
+
+        try {
+            if (contacts.length == 0) throw new IllegalArgumentException("List is empty");
+            return contacts;
+        } catch (IllegalArgumentException e) {
+            log(e);
+            throw e;
+        }
+    }
+
     public static void insertContactService(String firstname, String lastname, String phoneNumber) {
         try {
             if (insertContact(firstname, lastname, phoneNumber)) {
@@ -241,9 +246,14 @@ public class MobileApp2 {
         return -1;
     }
 
+    public static boolean isFull(String[][] contacts) {
+        return pivot == contacts.length;
+    }
+
     public static boolean insertContact(String firstname, String lastname, String phoneNumber) {
-        if (pivot == contacts.length) throw new IllegalArgumentException("Contacts list full");
         boolean inserted = false;
+
+        if (isFull(contacts)) {return false;}
 
         if (getContactIndexByPhoneNumber(phoneNumber) == -1) {
             pivot++;
